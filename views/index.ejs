@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+
+    <input type="text" placeholder="Escribe aquí un valor">
+    <button onclick="sendValue()">Enviar al parent</button>
+
+    <script>
+
+      const sendValue = () => {
+
+        const value = document.querySelector('input').value;
+
+        const data = {
+          inputValue: value,
+          objetoComplejo: {
+            campo1: 'campo1',
+            campo2: 'campo2'
+          }
+        };
+
+        window.parent.postMessage(JSON.stringify(data), '*');
+
+      }
+      
+    </script>
+
+
+  </body>
+</html>

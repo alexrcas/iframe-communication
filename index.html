@@ -1,0 +1,27 @@
+<h4>Valor escrito en el iframe: <span></span></h4>
+
+<iframe name="mywindow" frameborder="1" style="margin-bottom: 2em;"></iframe>
+
+<form action="http://localhost:3000" method="get" target="mywindow">
+    <button type="submit">Cargar iframe</button>
+</form>
+
+
+
+<script>
+
+  window.addEventListener('message', event => {
+
+    if (event.origin != 'http://localhost:3000') { return }
+
+    console.log("Mensaje de iframe recibido: " + event.data);
+
+    const data = JSON.parse(event.data);
+    console.log(data);
+
+    document.querySelector('span').innerHTML = data.inputValue;
+
+  });
+
+
+</script>
