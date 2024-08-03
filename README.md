@@ -25,7 +25,7 @@ parent.foo = 3
 Esto funciona siempre que tanto la ventana padre como el contenido del iframe sean servidos por el mismo dominio, el cual **no es nuestro caso**. Intentar lo anterior en el escenario planteado sería en vano y provocaría un error de *same-origin-policy*. Si el dominio `A.com` me ha servido la página padre, el navegador no permite que una página o script obtenidos de otro dominio como `B.com` accedan o manipulen el contexto de la primera, ya que las implicaciones de seguridad son obvias.
 
 
-### Solución
+### Solución nativa
 
 La documentación de Mozilla explica:
 
@@ -88,6 +88,62 @@ Es decir, el método *postMessage* es el mecanismo moderno y recomendado para co
       }
       
     </script>
+```
+
+### Solución con librería iframeCommunicator
+
+Se encapsula la lógica anterior en una pequeña librería que expone la clase `IframeCommunicator` y permite escribir el código de forma más concisa.
+
+
+#### Constructor
+```javascript
+IframeCommunicator(callback)
+```
+
+* `callback(e)`: función que se ejecuta cuando un mensaje sea recibido. Este callback posee a su vez un parámetro que contiene la información del mensaje. Este parámetro es opcional. Si se crea un comunicador que únicamente va a enviar mensajes y no a recibirlos no es necesario.
+
+#### Métodos
+
+```javascript
+sendMessage(target, message)
+```
+
+Envía un mensaje
+
+* `target`: ventana a la que se envía el mensaje.
+* `message`: mensaje en texto plano. Debe serializarse antes de enviar si se trata de un objeto.
+
+
+```javascript
+destroyListener()
+```
+
+Destruye el listener. Únicamente destruye el listener para la instancia de `IframeCommunicator` llamante. Otros eventListeners suscritos al evento `message` que han sido creados por otras instancias de `IframeCommunicator` o cualquier otro medio no se verán afectados.
+
+
+#### Ejemplo utilizando la librería
+
+El código javascript del ejemplo visto anteriormente quedaría de la siguiente forma usando la librería:
+
+##### Código en la ventana principal
+
+```javascript
+  const iframeCommunicator = new IframeCommunicator(e => {
+    console.log('evento recibido!', e)
+    document.querySelector('span').innerHTML = e.data.inputValue;
+    iframeCommunicator.destroyListener(); // Usado como ejemplo. Esto hará que tras recibir el primer dato ya no recibamos más
+  });
+```
+
+##### Código en el iframe
+
+```javascript
+    const iframeCommunicator = new IframeCommunicator();
+
+    const sendValue = () => {
+      const value = document.querySelector('input').value;
+      iframeCommunicator.sendMessage(window.parent, {inputValue: value})
+    }
 ```
 
 
