@@ -13,6 +13,7 @@
   const iframeCommunicator = new IframeCommunicator(e => {
     console.log('evento recibido!', e)
     document.querySelector('span').innerHTML = e.data.inputValue;
+    iframeCommunicator.destroyListener(); // Usado como ejemplo. Esto hará que tras recibir el primer dato ya no recibamos más
   });
 
 </script>
