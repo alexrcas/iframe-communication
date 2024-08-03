@@ -6,16 +6,13 @@
     <button type="submit">Cargar iframe</button>
 </form>
 
+<script src="iframeCommunicator.js"></script>
+
 <script>
 
-  window.addEventListener('message', event => {
-
-    if (event.origin != 'http://localhost:3000') { return }
-    console.log("Mensaje de iframe recibido: " + event.data);
-    const data = JSON.parse(event.data);
-    console.log(data);
-
-    document.querySelector('span').innerHTML = data.inputValue;
+  const iframeCommunicator = new IframeCommunicator(e => {
+    console.log('evento recibido!', e)
+    document.querySelector('span').innerHTML = e.data.inputValue;
   });
 
 </script>

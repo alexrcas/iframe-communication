@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-  </head>
-  <body>
 
-    <input type="text" placeholder="Escribe aquí un valor">
-    <button onclick="sendValue()">Enviar al parent</button>
+<head>
+  <title>
+    <%= title %>
+  </title>
 
-    <script>
+  <script src="iframeCommunicator.js"></script>
+</head>
 
-      const sendValue = () => {
+<body>
 
-        const value = document.querySelector('input').value;
+  <input type="text" placeholder="Escribe aquí un valor">
+  <button onclick="sendValue()">Enviar al parent</button>
 
-        const data = {
-          inputValue: value,
-          objetoComplejo: {
-            campo1: 'campo1',
-            campo2: 'campo2'
-          }
-        };
+  <script>
 
-        window.parent.postMessage(JSON.stringify(data), '*');
-      }
-      
-    </script>
+    const iframeCommunicator = new IframeCommunicator();
+
+    const sendValue = () => {
+      const value = document.querySelector('input').value;
+      iframeCommunicator.sendMessage(window.parent, {inputValue: value})
+    }
     
-  </body>
+  </script>
+
+</body>
+
 </html>
