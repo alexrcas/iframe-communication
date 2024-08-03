@@ -92,8 +92,7 @@ Es decir, el método *postMessage* es el mecanismo moderno y recomendado para co
 
 ### Solución con librería iframeCommunicator
 
-Se encapsula la lógica anterior en una pequeña librería que expone la clase `IframeCommunicator` y permite escribir el código de forma más concisa.
-
+Se encapsula la lógica anterior en una pequeña librería que expone la clase `IframeCommunicator`. Dado que el código necesario de forma nativa es mínimo, realmente esta librería no aporta una reducción del tamaño de dicho código para lograr la misma funcionalidad, pero sí contribuye a encapsular el código separando la responsabilidad, dándole significado semántico y haciendo que sea más sencillo mantener una referencia al eventListener para cuando desee eliminarse.
 
 #### Constructor
 ```javascript
